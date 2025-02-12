@@ -1,4 +1,4 @@
-package org.fevr.portfolio
+package org.fevr.portfolio.visuals
 
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -17,8 +17,8 @@ val CustomLightColorScheme = lightColors(
 )
 
 val CustomDarkColorScheme = darkColors(
-    primary = Color(0xFFBB86FC),
-    secondary = Color(0xFF03DAC6),
+    primary = Color(0xFFB71935),
+    secondary = Color(0xFF7A0930),
     background = Color(0xFF121212),
     surface = Color(0xFF121212),
     onPrimary = Color(0xFF000000),
