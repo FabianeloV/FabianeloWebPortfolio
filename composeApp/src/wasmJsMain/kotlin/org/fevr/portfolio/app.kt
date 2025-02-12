@@ -11,9 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.fevr.portfolio.TopActions.*
+import org.fevr.portfolio.screens.AboutScreen
+import org.fevr.portfolio.screens.ContactScreen
+import org.fevr.portfolio.screens.MainScreen
+import org.fevr.portfolio.screens.ProjectsScreen
 import org.fevr.portfolio.visuals.CustomDarkColorScheme
 import org.fevr.portfolio.visuals.CustomLightColorScheme
+import org.fevr.portfolio.visuals.rubikFamily
 import org.fevr.portfolio.visuals.rubikMono
 
 @Composable
@@ -22,21 +26,24 @@ fun app() {
 
     val colorScheme = if (colorState.value) CustomLightColorScheme else CustomDarkColorScheme
 
+    val currentScreen = remember { mutableStateOf("Main") }
+
     MaterialTheme(colorScheme) {
         Scaffold(
-            topBar = { topWebAppBar(colorState) }
+            topBar = { topWebAppBar(colorState, currentScreen) }
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
                 content = {
-                    Column {
-                        OutlinedTextField("", onValueChange = {}, label = { Text("Prueba") })
-                        Button(onClick = { colorState.value = !colorState.value }) {
-                            Text("Cambiar")
-                        }
+                    when (currentScreen.value) {
+                        "Main" -> MainScreen()
+                        "About" -> AboutScreen()
+                        "Contact me" -> ContactScreen()
+                        "Experience" -> TODO()
+                        "Projects" -> ProjectsScreen()
+                        else -> MainScreen()
                     }
-
                 }
             )
         }
@@ -44,32 +51,36 @@ fun app() {
 }
 
 @Composable
-fun topWebAppBar(state: MutableState<Boolean>) {
-     val topList = listOf(
-        About,
-        Projects,
-        Exp,
-        Contact
-    )
+fun topWebAppBar(state: MutableState<Boolean>, currentScreen: MutableState<String>) {
     TopAppBar(
-        title = { Text("Fabian Verdesoto", fontFamily = rubikMono()) },
+        title = {
+            Text(
+                "Fabian Verdesoto",
+                fontFamily = rubikMono(),
+                modifier = Modifier.clickable { currentScreen.value = "Main" })
+        },
         actions = {
-            topActions(state)
+            topActions(state, currentScreen)
         },
         elevation = 8.dp
     )
 }
 
 @Composable
-fun topActions(state: MutableState<Boolean>){
+fun topActions(state: MutableState<Boolean>, currentScreen: MutableState<String>) {
     val topList = listOf(
-        About,
-        Projects,
-        Exp,
-        Contact
+        "About",
+        "Projects",
+        "Experience",
+        "Contact me"
     )
     topList.forEach {
-        Text(it.text, modifier = Modifier.padding(10.dp).clickable(onClick = it.click), fontWeight = FontWeight.Bold)
+        Text(
+            it,
+            modifier = Modifier.padding(10.dp).clickable(onClick = { currentScreen.value = it }),
+            fontFamily = rubikFamily(),
+            fontWeight = FontWeight.Bold
+        )
     }
 
     Spacer(modifier = Modifier.padding(30.dp))
