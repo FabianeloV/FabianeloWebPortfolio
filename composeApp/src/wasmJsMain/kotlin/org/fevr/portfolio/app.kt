@@ -22,7 +22,7 @@ import org.fevr.portfolio.visuals.rubikMono
 
 @Composable
 fun app() {
-    val colorState = remember { mutableStateOf(false) }
+    val colorState = remember { mutableStateOf(true) }
 
     val colorScheme = if (colorState.value) CustomLightColorScheme else CustomDarkColorScheme
 
@@ -55,7 +55,7 @@ fun topWebAppBar(state: MutableState<Boolean>, currentScreen: MutableState<Strin
     TopAppBar(
         title = {
             Text(
-                "Fabian Verdesoto",
+                "Fabian",
                 fontFamily = rubikMono(),
                 modifier = Modifier.clickable { currentScreen.value = "Main" })
         },
