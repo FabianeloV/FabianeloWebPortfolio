@@ -1,18 +1,15 @@
 package org.fevr.portfolio.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,6 +25,7 @@ import fabianelowebportfolio.composeapp.generated.resources.*
 import fabianelowebportfolio.composeapp.generated.resources.Res
 import fabianelowebportfolio.composeapp.generated.resources.foto
 import fabianelowebportfolio.composeapp.generated.resources.mail
+import kotlinx.coroutines.launch
 import org.fevr.portfolio.dataClasses.Project
 import org.fevr.portfolio.dataClasses.Socials
 import org.fevr.portfolio.visuals.rubikFamily
@@ -47,7 +46,7 @@ val projects = listOf(
             Pair(Icons.Filled.Place, "Shared preferences"),
             Pair(Icons.Filled.Place, "Google maps API"),
         ),
-         Res.drawable.ecozo1
+        Res.drawable.ecozo1
     ),
     Project(
         "PERSONAL TRACKER",
@@ -82,15 +81,20 @@ val projects = listOf(
 
 
 @Composable
-fun MainScreen() {
-    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(horizontal = 128.dp)) {
+fun MainScreen(scrollState: LazyListState) {
+
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(horizontal = 128.dp, vertical = 16.dp),
+        state = scrollState
+    ) {
         item { introCard() }
         item {
             Text(
                 "My projects",
                 fontFamily = rubikMono(),
                 fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 26.dp)
+                modifier = Modifier.padding(vertical = 36.dp)
             )
         }
 
@@ -101,6 +105,15 @@ fun MainScreen() {
                 techStack = it.stack,
                 onLearnMoreClick = {},
                 imageVector = it.image
+            )
+        }
+
+        item {
+            Text(
+                "Experience",
+                fontFamily = rubikMono(),
+                fontSize = 48.sp,
+                modifier = Modifier.padding(vertical = 26.dp)
             )
         }
     }
@@ -146,6 +159,8 @@ fun photoWithButtons() {
         Socials(Res.drawable.linkedin, "https://www.linkedin.com/in/fabianverdesoto/")
     )
 
+    val uriHandler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
             .padding(16.dp),
@@ -168,7 +183,7 @@ fun photoWithButtons() {
         ) {
             socials.forEach {
                 Button(
-                    onClick = { /* Handle button click */ },
+                    onClick = { uriHandler.openUri(it.link) },
                     modifier = Modifier
                         .padding(6.dp)
                 ) {

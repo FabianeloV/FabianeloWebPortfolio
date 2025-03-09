@@ -1,7 +1,10 @@
 package org.fevr.portfolio
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -11,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.fevr.portfolio.screens.AboutScreen
 import org.fevr.portfolio.screens.ContactScreen
 import org.fevr.portfolio.screens.MainScreen
@@ -26,24 +30,17 @@ fun app() {
 
     val colorScheme = if (colorState.value) CustomLightColorScheme else CustomDarkColorScheme
 
-    val currentScreen = remember { mutableStateOf("Main") }
+    val scrollState = rememberLazyListState()
 
     MaterialTheme(colorScheme) {
         Scaffold(
-            topBar = { topWebAppBar(colorState, currentScreen) }
+            topBar = { topWebAppBar(colorState, scrollState) }
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
                 content = {
-                    when (currentScreen.value) {
-                        "Main" -> MainScreen()
-                        "About" -> AboutScreen()
-                        "Contact me" -> ContactScreen()
-                        "Experience" -> TODO()
-                        "Projects" -> ProjectsScreen()
-                        else -> MainScreen()
-                    }
+                    MainScreen(scrollState)
                 }
             )
         }
@@ -51,33 +48,35 @@ fun app() {
 }
 
 @Composable
-fun topWebAppBar(state: MutableState<Boolean>, currentScreen: MutableState<String>) {
+fun topWebAppBar(state: MutableState<Boolean>, scrollState: LazyListState) {
     TopAppBar(
         title = {
             Text(
                 "Fabian",
                 fontFamily = rubikMono(),
-                modifier = Modifier.clickable { currentScreen.value = "Main" })
+                )
         },
         actions = {
-            topActions(state, currentScreen)
+            topActions(state, scrollState)
         },
         elevation = 8.dp
     )
 }
 
 @Composable
-fun topActions(state: MutableState<Boolean>, currentScreen: MutableState<String>) {
+fun topActions(state: MutableState<Boolean>, scrollState: LazyListState) {
+    val scope = rememberCoroutineScope()
+
     val topList = listOf(
-        "About",
-        "Projects",
-        "Experience",
-        "Contact me"
+        Pair("About",0),
+        Pair("Projects",1),
+        Pair("Experience",2),
+        Pair("Contact me",3)
     )
     topList.forEach {
         Text(
-            it,
-            modifier = Modifier.padding(10.dp).clickable(onClick = { currentScreen.value = it }),
+            it.first,
+            modifier = Modifier.padding(10.dp).clickable(onClick = { scope.launch { scrollState.animateScrollToItem(it.second) } }),
             fontFamily = rubikFamily(),
             fontWeight = FontWeight.Bold
         )
