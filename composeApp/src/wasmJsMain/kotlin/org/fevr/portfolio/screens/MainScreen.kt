@@ -9,11 +9,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -25,13 +23,11 @@ import fabianelowebportfolio.composeapp.generated.resources.*
 import fabianelowebportfolio.composeapp.generated.resources.Res
 import fabianelowebportfolio.composeapp.generated.resources.foto
 import fabianelowebportfolio.composeapp.generated.resources.mail
-import kotlinx.coroutines.launch
 import org.fevr.portfolio.dataClasses.Project
 import org.fevr.portfolio.dataClasses.Socials
 import org.fevr.portfolio.visuals.rubikFamily
 import org.fevr.portfolio.visuals.rubikMono
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.Resource
 import org.jetbrains.compose.resources.painterResource
 
 val projects = listOf(
@@ -69,7 +65,7 @@ val projects = listOf(
     ),
     Project(
         "TORCA",
-        "ECommerce made for a local tools and wood store",
+        "Landing page made for a local tools and wood store",
         listOf(
             Pair(Icons.Filled.Place, "Compose Multiplatform"),
             Pair(Icons.Filled.Place, "Kotlin")
@@ -81,14 +77,27 @@ val projects = listOf(
 
 
 @Composable
-fun MainScreen(scrollState: LazyListState) {
-
+fun mainScreen(scrollState: LazyListState) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 128.dp, vertical = 16.dp),
         state = scrollState
     ) {
         item { introCard() }
+
+        item {
+            Text(
+                "Experience",
+                fontFamily = rubikMono(),
+                fontSize = 48.sp,
+                modifier = Modifier.padding(vertical = 32.dp)
+            )
+        }
+
+        item {
+            experienceTimeline()
+        }
+
         item {
             Text(
                 "My projects",
@@ -99,21 +108,12 @@ fun MainScreen(scrollState: LazyListState) {
         }
 
         items(projects) {
-            ProjectCard(
+            projectCard(
                 projectName = it.name,
                 projectDescription = it.description,
                 techStack = it.stack,
                 onLearnMoreClick = {},
                 imageVector = it.image
-            )
-        }
-
-        item {
-            Text(
-                "Experience",
-                fontFamily = rubikMono(),
-                fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 26.dp)
             )
         }
     }
@@ -195,10 +195,10 @@ fun photoWithButtons() {
 }
 
 @Composable
-fun ProjectCard(
+fun projectCard(
     projectName: String,
     projectDescription: String,
-    techStack: List<Pair<ImageVector, String>>, // Icon resource and label
+    techStack: List<Pair<ImageVector, String>>,
     onLearnMoreClick: () -> Unit,
     imageVector: DrawableResource
 ) {
@@ -235,7 +235,7 @@ fun ProjectCard(
             // Tech Stack Icons
             LazyRow(modifier = Modifier.padding(horizontal = 16.dp)) {
                 items(techStack) { (icon, label) ->
-                    TechBadge(icon, label)
+                    techBadge(icon, label)
                 }
             }
 
@@ -268,7 +268,7 @@ fun ProjectCard(
 }
 
 @Composable
-fun TechBadge(icon: ImageVector, label: String) {
+fun techBadge(icon: ImageVector, label: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -286,5 +286,109 @@ fun TechBadge(icon: ImageVector, label: String) {
             Text(text = label, fontSize = 18.sp, color = Color.White)
         }
 
+    }
+}
+
+@Composable
+fun experienceTimeline() {
+    Column {
+        // First Experience Item
+        experienceItem(
+            companyName = "Sociedad Latinoamericana de Nutrición (SLAN)",
+            position = "Full-Stack Android Developer",
+            period = "February, 2023 - October, 2023",
+            description = "Developed a fully functional mobile app for the international congress SLAN EC 2023"
+        )
+
+        // Second Experience Item
+        experienceItem(
+            companyName = "Prosaf",
+            position = "Full-Stack Odoo Intern",
+            period = "July, 2024 - January, 2025",
+            description = "Full-Stack Odoo Intern, maintaining the Prosaf's odoo based ERP OLYMPO"
+        )
+
+        // Third Experience Item
+        experienceItem(
+            companyName = "Freelance",
+            position = "Full-Stack Developer",
+            period = "July 2024 - Present",
+            description = "I actively try to solve the needs of multiple clients"
+        )
+    }
+}
+
+@Composable
+fun experienceItem(
+    companyName: String,
+    position: String,
+    period: String,
+    description: String
+) {
+    val accentColor = MaterialTheme.colors.primary
+
+    Row(modifier = Modifier.fillMaxWidth()) {
+        // Left side - Timeline
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.width(24.dp)
+        ) {
+            // Circle dot
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .clip(CircleShape)
+                    .background(accentColor)
+            )
+
+            // Vertical line
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(100.dp)
+                    .background(accentColor)
+            )
+
+        }
+
+        // Right side - Content
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp, bottom = 16.dp)
+                .fillMaxWidth()
+        ) {
+            // Company name
+            Text(
+                text = companyName,
+                color = accentColor,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            // Position
+            if (position.isNotEmpty()) {
+                Text(
+                    text = position,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            // Period
+            Text(
+                text = period,
+                color = Color.Gray,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
+            )
+
+            // Description
+            Text(
+                text = description,
+                fontSize = 24.sp,
+                lineHeight = 20.sp
+            )
+        }
     }
 }

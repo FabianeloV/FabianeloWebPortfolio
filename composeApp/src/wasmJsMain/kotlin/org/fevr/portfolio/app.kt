@@ -1,6 +1,5 @@
 package org.fevr.portfolio
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
@@ -15,10 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.fevr.portfolio.screens.AboutScreen
-import org.fevr.portfolio.screens.ContactScreen
-import org.fevr.portfolio.screens.MainScreen
-import org.fevr.portfolio.screens.ProjectsScreen
+import org.fevr.portfolio.screens.mainScreen
 import org.fevr.portfolio.visuals.CustomDarkColorScheme
 import org.fevr.portfolio.visuals.CustomLightColorScheme
 import org.fevr.portfolio.visuals.rubikFamily
@@ -40,7 +36,7 @@ fun app() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
                 content = {
-                    MainScreen(scrollState)
+                    mainScreen(scrollState)
                 }
             )
         }
