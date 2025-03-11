@@ -65,8 +65,8 @@ fun topActions(state: MutableState<Boolean>, scrollState: LazyListState) {
 
     val topList = listOf(
         Pair("About",0),
-        Pair("Projects",1),
-        Pair("Experience",2),
+        Pair("Experience",1),
+        Pair("Projects",2),
         Pair("Contact me",3)
     )
     topList.forEach {

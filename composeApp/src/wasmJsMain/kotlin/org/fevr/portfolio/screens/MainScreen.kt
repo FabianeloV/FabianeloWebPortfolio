@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,6 +117,19 @@ fun mainScreen(scrollState: LazyListState) {
                 imageVector = it.image
             )
         }
+
+        item {
+            Text(
+                "Contact me",
+                fontFamily = rubikMono(),
+                fontSize = 48.sp,
+                modifier = Modifier.padding(vertical = 36.dp)
+            )
+        }
+
+        item {
+            contactCard()
+        }
     }
 }
 
@@ -187,7 +201,7 @@ fun photoWithButtons() {
                     modifier = Modifier
                         .padding(6.dp)
                 ) {
-                    Image(painter = painterResource(it.icon), null, modifier = Modifier.size(36.dp))
+                    Icon(painter = painterResource(it.icon), null, modifier = Modifier.size(36.dp), tint = Color.White)
                 }
             }
         }
@@ -389,6 +403,140 @@ fun experienceItem(
                 fontSize = 24.sp,
                 lineHeight = 20.sp
             )
+        }
+    }
+}
+
+@Composable
+fun contactCard() {
+    val secondaryTextColor = MaterialTheme.colors.primary
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp, horizontal = 240.dp),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(24.dp)
+        ) {
+            // Subtitle
+            Text(
+                text = "You can contact me via Email, Linkedin or Github. I usually respond within a day.",
+                color = secondaryTextColor,
+                fontSize = 52.sp,
+                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
+                fontFamily = rubikFamily()
+            )
+
+            // Contact options
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Linkedin
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
+                            .size(120.dp)
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.linkedin),
+                            contentDescription = "Linkedin",
+                            tint = Color.White,
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
+                    Text(
+                        text = "LinkeDin",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 30.sp,
+                        modifier = Modifier.padding(top = 10.dp),
+                        fontFamily = rubikMono()
+                    )
+                    Text(
+                        text = "Fabian Verdesoto",
+                        color = secondaryTextColor,
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(top = 4.dp),
+                        fontFamily = rubikFamily()
+                    )
+                }
+
+                // Email
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
+                            .size(120.dp)
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Email,
+                            contentDescription = "Email",
+                            modifier = Modifier.size(100.dp),
+                            tint = Color.White,
+                        )
+                    }
+                    Text(
+                        text = "Email",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 30.sp,
+                        modifier = Modifier.padding(top = 10.dp),
+                        fontFamily = rubikMono()
+                    )
+                    Text(
+                        text = "fevr.developer@gmail.com",
+                        color = secondaryTextColor,
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(top = 4.dp),
+                        fontFamily = rubikFamily()
+                    )
+                }
+
+                // Github
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.github),
+                            contentDescription = "Github",
+                            modifier = Modifier.size(100.dp),
+                            tint = Color.White
+                        )
+                    }
+                    Text(
+                        text = "Github",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 30.sp,
+                        modifier = Modifier.padding(top = 10.dp),
+                        fontFamily = rubikMono()
+                    )
+                    Text(
+                        text = "FabianeloV",
+                        color = secondaryTextColor,
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(top = 4.dp),
+                        fontFamily = rubikFamily()
+                    )
+                }
+            }
         }
     }
 }
