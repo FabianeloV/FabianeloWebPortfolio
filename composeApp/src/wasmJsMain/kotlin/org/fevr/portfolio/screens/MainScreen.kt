@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.runtime.Composable
@@ -14,10 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fabianelowebportfolio.composeapp.generated.resources.*
@@ -36,42 +38,47 @@ val projects = listOf(
         "ECOZO",
         "Social network where Cuenca's people can post impactful events from the city",
         listOf(
-            Pair(Icons.Filled.Place, "Kotlin"),
-            Pair(Icons.Filled.Place, "Jetpack compose"),
-            Pair(Icons.Filled.Place, "Room"),
-            Pair(Icons.Filled.Place, "Firebase"),
-            Pair(Icons.Filled.Place, "Shared preferences"),
-            Pair(Icons.Filled.Place, "Google maps API"),
+             "Kotlin",
+             "Jetpack compose",
+             "Room",
+             "Firebase",
+           "Shared preferences",
+           "Google maps API"
         ),
-        Res.drawable.ecozo1
+        Res.drawable.ecozo1,
+        ""
     ),
     Project(
         "PERSONAL TRACKER",
         "Personal tracker for finances, workflows and habits",
         listOf(
-            Pair(Icons.Filled.Place, "Kotlin"),
-            Pair(Icons.Filled.Place, "Jetpack compose"),
-            Pair(Icons.Filled.Place, "Room"),
-            Pair(Icons.Filled.Place, "Shared preferences")
+             "Kotlin",
+            "Jetpack compose",
+             "Room",
+             "Shared preferences"
         ),
-        Res.drawable.personal1
+        Res.drawable.personal1,
+        "https://github.com/FabianeloV/Personal_Tracker"
     ),
     Project(
         "GARDEN FIORE",
         "ECommerce made for a local flower store",
         listOf(
-            Pair(Icons.Filled.Place, "Odoo")
+            "Odoo"
         ),
-        Res.drawable.garden1
+        Res.drawable.garden1,
+        "https://garden-fiore.odoo.com/"
     ),
     Project(
         "TORCA",
         "Landing page made for a local tools and wood store",
         listOf(
-            Pair(Icons.Filled.Place, "Compose Multiplatform"),
-            Pair(Icons.Filled.Place, "Kotlin")
+            "Compose Multiplatform",
+            "Kotlin",
+            "Web Assembly"
         ),
-        Res.drawable.torca1
+        Res.drawable.torca1,
+        "https://fabianelov.github.io/TorcaWeb/"
     )
 
 )
@@ -79,12 +86,27 @@ val projects = listOf(
 
 @Composable
 fun mainScreen(scrollState: LazyListState) {
+    val uriHandler = LocalUriHandler.current
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(horizontal = 128.dp, vertical = 16.dp),
         state = scrollState
     ) {
-        item { introCard() }
+        item { introCard(uriHandler) }
+
+        item {
+            Text(
+                "What I work with",
+                fontFamily = rubikMono(),
+                fontSize = 48.sp,
+                modifier = Modifier.padding(vertical = 32.dp)
+            )
+        }
+
+        item {
+            techGrid()
+        }
 
         item {
             Text(
@@ -113,7 +135,8 @@ fun mainScreen(scrollState: LazyListState) {
                 projectName = it.name,
                 projectDescription = it.description,
                 techStack = it.stack,
-                onLearnMoreClick = {},
+                uri = it.uri,
+                onLearnMoreClick = {uriHandler.openUri(it.uri)},
                 imageVector = it.image
             )
         }
@@ -128,20 +151,22 @@ fun mainScreen(scrollState: LazyListState) {
         }
 
         item {
-            contactCard()
+            contactCard(uriHandler)
         }
+
+        item { Spacer(modifier = Modifier.height(16.dp)) }
     }
 }
 
 @Composable
-fun introCard() {
+fun introCard(uriHandler: UriHandler) {
     Card(shape = RoundedCornerShape(16.dp), elevation = 8.dp, modifier = Modifier.padding(5.dp)) {
         Row(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(20.dp)
         ) {
-            photoWithButtons()
+            photoWithButtons(uriHandler)
             nameColumn()
         }
     }
@@ -166,14 +191,12 @@ fun nameColumn() {
 }
 
 @Composable
-fun photoWithButtons() {
+fun photoWithButtons(uriHandler: UriHandler) {
     val socials = listOf(
-        Socials(Res.drawable.mail, "fevr.developer@gmail.com"),
+        Socials(Res.drawable.mail, "https://mail.google.com/mail/?view=cm&fs=1&to=fevr.developer@gmail.com"),
         Socials(Res.drawable.github, "https://github.com/FabianeloV"),
         Socials(Res.drawable.linkedin, "https://www.linkedin.com/in/fabianverdesoto/")
     )
-
-    val uriHandler = LocalUriHandler.current
 
     Column(
         modifier = Modifier
@@ -212,7 +235,8 @@ fun photoWithButtons() {
 fun projectCard(
     projectName: String,
     projectDescription: String,
-    techStack: List<Pair<ImageVector, String>>,
+    techStack: List<String>,
+    uri: String,
     onLearnMoreClick: () -> Unit,
     imageVector: DrawableResource
 ) {
@@ -248,8 +272,8 @@ fun projectCard(
 
             // Tech Stack Icons
             LazyRow(modifier = Modifier.padding(horizontal = 16.dp)) {
-                items(techStack) { (icon, label) ->
-                    techBadge(icon, label)
+                items(techStack) { label ->
+                    techBadge(label)
                 }
             }
 
@@ -258,31 +282,31 @@ fun projectCard(
             // Project Description
             Text(
                 text = projectDescription,
-                fontSize = 24.sp,
-                color = Color.Gray,
+                fontSize = 28.sp,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Learn More Button
-            Button(
-                onClick = onLearnMoreClick,
-                shape = RoundedCornerShape(50),
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                Text(text = "Learn more", fontWeight = FontWeight.Bold)
+            if (uri.isNotEmpty()) {
+                Button(
+                    onClick = onLearnMoreClick,
+                    shape = RoundedCornerShape(50),
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(text = "Learn more", fontFamily = rubikFamily(), fontSize = 28.sp, color = Color.White)
+                }
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
 
 @Composable
-fun techBadge(icon: ImageVector, label: String) {
+fun techBadge(label: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -291,7 +315,7 @@ fun techBadge(icon: ImageVector, label: String) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(12.dp)) {
             Icon(
-                imageVector = icon,
+                imageVector = Icons.Filled.Done,
                 contentDescription = label,
                 modifier = Modifier.size(24.dp),
                 tint = Color.White
@@ -408,26 +432,29 @@ fun experienceItem(
 }
 
 @Composable
-fun contactCard() {
+fun contactCard(uriHandler: UriHandler) {
     val secondaryTextColor = MaterialTheme.colors.primary
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 240.dp),
-        shape = RoundedCornerShape(16.dp)
+            .padding(vertical = 6.dp, horizontal = 220.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 8.dp
     ) {
         Column(
             modifier = Modifier
-                .padding(24.dp)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Subtitle
             Text(
-                text = "You can contact me via Email, Linkedin or Github. I usually respond within a day.",
+                text = "You can contact me via Email, Linkedin or Github.",
                 color = secondaryTextColor,
-                fontSize = 52.sp,
-                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp),
-                fontFamily = rubikFamily()
+                fontSize = 48.sp,
+                modifier = Modifier.padding(top = 8.dp, bottom = 38.dp),
+                fontFamily = rubikFamily(),
+                textAlign = TextAlign.Center
             )
 
             // Contact options
@@ -441,8 +468,9 @@ fun contactCard() {
                 ) {
                     Box(
                         modifier = Modifier
+                            .clickable { uriHandler.openUri("https://www.linkedin.com/in/fabianverdesoto/") }
                             .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
-                            .size(120.dp)
+                            .size(130.dp)
                             .padding(10.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -475,8 +503,9 @@ fun contactCard() {
                 ) {
                     Box(
                         modifier = Modifier
+                            .clickable { uriHandler.openUri("https://mail.google.com/mail/?view=cm&fs=1&to=fevr.developer@gmail.com") }
                             .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
-                            .size(120.dp)
+                            .size(130.dp)
                             .padding(10.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -509,7 +538,8 @@ fun contactCard() {
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(120.dp)
+                            .clickable { uriHandler.openUri("https://github.com/FabianeloV") }
+                            .size(130.dp)
                             .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
                             .padding(10.dp),
                         contentAlignment = Alignment.Center
@@ -537,6 +567,102 @@ fun contactCard() {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun techGrid() {
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 220.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(18.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            techCard(
+                iconRes = Res.drawable.Kotlin,
+                name = "Kotlin",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.java,
+                name = "Java",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.python,
+                name = "Python",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.compose,
+                name = "j. Compose",
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(18.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            techCard(
+                iconRes = Res.drawable.data,
+                name = "SQL",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.firebase,
+                name = "Firebase",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.ktor,
+                name = "ktor",
+                modifier = Modifier.weight(1f)
+            )
+            techCard(
+                iconRes = Res.drawable.spring,
+                name = "Spring boot",
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+    }
+}
+
+@Composable
+fun techCard(
+    iconRes: DrawableResource,
+    name: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .padding(5.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = 6.dp
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Image(
+                painter = painterResource(iconRes),
+                contentDescription = name,
+                modifier = Modifier.size(64.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = name,
+                fontFamily = rubikMono(),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.primary,
+                fontSize = 24.sp
+            )
         }
     }
 }

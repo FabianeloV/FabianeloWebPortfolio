@@ -48,7 +48,7 @@ fun topWebAppBar(state: MutableState<Boolean>, scrollState: LazyListState) {
     TopAppBar(
         title = {
             Text(
-                "Fabian",
+                "Fabian Verdesoto",
                 fontFamily = rubikMono(),
                 )
         },
@@ -65,9 +65,9 @@ fun topActions(state: MutableState<Boolean>, scrollState: LazyListState) {
 
     val topList = listOf(
         Pair("About",0),
-        Pair("Experience",1),
-        Pair("Projects",2),
-        Pair("Contact me",3)
+        Pair("Experience",3),
+        Pair("Projects",5),
+        Pair("Contact me",10)
     )
     topList.forEach {
         Text(
