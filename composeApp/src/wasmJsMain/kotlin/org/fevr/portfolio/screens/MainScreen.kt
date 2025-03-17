@@ -181,11 +181,23 @@ fun nameColumn() {
             Text("Cuenca - Ecuador", fontFamily = rubikFamily())
         }
         Text(
-            "Mobile developer and CS student",
+            "Mobile and backend developer - CS engineering student",
             fontFamily = rubikFamily(),
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(vertical = 4.dp)
         )
+        Text(
+            "National #8 IEEExtreme 17.0",
+            fontFamily = rubikFamily(),
+            fontSize = 20.sp,
+        )
+        Text(
+            "National #12 IEEExtreme 18.0",
+            fontFamily = rubikFamily(),
+            fontSize = 20.sp,
+        )
+
 
     }
 }
@@ -610,7 +622,7 @@ fun techGrid() {
         ) {
             techCard(
                 iconRes = Res.drawable.data,
-                name = "SQL",
+                name = "PostgreSQL",
                 modifier = Modifier.weight(1f)
             )
             techCard(
@@ -625,7 +637,7 @@ fun techGrid() {
             )
             techCard(
                 iconRes = Res.drawable.spring,
-                name = "Spring boot",
+                name = "Spring",
                 modifier = Modifier.weight(1f)
             )
         }
