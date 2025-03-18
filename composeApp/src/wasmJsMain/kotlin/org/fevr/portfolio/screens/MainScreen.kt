@@ -450,7 +450,7 @@ fun contactCard(uriHandler: UriHandler) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 220.dp),
+            .padding(vertical = 6.dp, horizontal = 200.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp
     ) {
@@ -459,16 +459,6 @@ fun contactCard(uriHandler: UriHandler) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Subtitle
-            Text(
-                text = "You can contact me via Email, Linkedin or Github.",
-                color = secondaryTextColor,
-                fontSize = 48.sp,
-                modifier = Modifier.padding(top = 8.dp, bottom = 38.dp),
-                fontFamily = rubikFamily(),
-                textAlign = TextAlign.Center
-            )
-
             // Contact options
             Row(
                 modifier = Modifier.fillMaxWidth(),
