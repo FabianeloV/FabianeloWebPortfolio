@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fabianelowebportfolio.composeapp.generated.resources.*
@@ -38,12 +39,12 @@ val projects = listOf(
         "ECOZO",
         "Social network where Cuenca's people can post impactful events from the city",
         listOf(
-             "Kotlin",
-             "Jetpack compose",
-             "Room",
-             "Firebase",
-           "Shared preferences",
-           "Google maps API"
+            "Kotlin",
+            "Jetpack compose",
+            "Room",
+            "Firebase",
+            "Shared preferences",
+            "Google maps API"
         ),
         Res.drawable.ecozo1,
         ""
@@ -52,10 +53,10 @@ val projects = listOf(
         "PERSONAL TRACKER",
         "Personal tracker for finances, workflows and habits",
         listOf(
-             "Kotlin",
+            "Kotlin",
             "Jetpack compose",
-             "Room",
-             "Shared preferences"
+            "Room",
+            "Shared preferences"
         ),
         Res.drawable.personal1,
         "https://github.com/FabianeloV/Personal_Tracker"
@@ -80,17 +81,17 @@ val projects = listOf(
         Res.drawable.torca1,
         "https://fabianelov.github.io/TorcaWeb/"
     )
-
 )
-
 
 @Composable
 fun mainScreen(scrollState: LazyListState) {
     val uriHandler = LocalUriHandler.current
 
     LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 128.dp, vertical = 16.dp),
         state = scrollState
     ) {
         item { introCard(uriHandler) }
@@ -99,8 +100,9 @@ fun mainScreen(scrollState: LazyListState) {
             Text(
                 "What I work with",
                 fontFamily = rubikMono(),
-                fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 32.dp)
+                fontSize = 32.sp,
+                modifier = Modifier.padding(vertical = 24.dp),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -112,8 +114,9 @@ fun mainScreen(scrollState: LazyListState) {
             Text(
                 "Experience",
                 fontFamily = rubikMono(),
-                fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 32.dp)
+                fontSize = 32.sp,
+                modifier = Modifier.padding(vertical = 24.dp),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -125,8 +128,9 @@ fun mainScreen(scrollState: LazyListState) {
             Text(
                 "My projects",
                 fontFamily = rubikMono(),
-                fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 36.dp)
+                fontSize = 32.sp,
+                modifier = Modifier.padding(vertical = 24.dp),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -145,8 +149,9 @@ fun mainScreen(scrollState: LazyListState) {
             Text(
                 "Contact me",
                 fontFamily = rubikMono(),
-                fontSize = 48.sp,
-                modifier = Modifier.padding(vertical = 36.dp)
+                fontSize = 32.sp,
+                modifier = Modifier.padding(vertical = 24.dp),
+                textAlign = TextAlign.Center
             )
         }
 
@@ -160,13 +165,18 @@ fun mainScreen(scrollState: LazyListState) {
 
 @Composable
 fun introCard(uriHandler: UriHandler) {
-    Card(shape = RoundedCornerShape(16.dp), elevation = 8.dp, modifier = Modifier.padding(5.dp)) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically,
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = 8.dp,
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(20.dp)
         ) {
             photoWithButtons(uriHandler)
+            Spacer(modifier = Modifier.height(16.dp))
             nameColumn()
         }
     }
@@ -174,31 +184,41 @@ fun introCard(uriHandler: UriHandler) {
 
 @Composable
 fun nameColumn() {
-    Column {
-        Text("Fabian Verdesoto", fontFamily = rubikFamily(), fontWeight = FontWeight.Black, fontSize = 32.sp)
-        Row(modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            "Fabian Verdesoto",
+            fontFamily = rubikFamily(),
+            fontWeight = FontWeight.Black,
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center
+        )
+        Row(
+            modifier = Modifier.padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Icon(Icons.Filled.Place, null, tint = MaterialTheme.colors.primary)
-            Text("Cuenca - Ecuador", fontFamily = rubikFamily())
+            Text("Cuenca - Ecuador", fontFamily = rubikFamily(), fontSize = 16.sp)
         }
         Text(
             "Mobile and backend developer - CS engineering student",
             fontFamily = rubikFamily(),
-            fontSize = 24.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp),
+            textAlign = TextAlign.Center
         )
         Text(
             "National #8 IEEExtreme 17.0",
             fontFamily = rubikFamily(),
-            fontSize = 20.sp,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center
         )
         Text(
             "National #12 IEEExtreme 18.0",
             fontFamily = rubikFamily(),
-            fontSize = 20.sp,
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center
         )
-
-
     }
 }
 
@@ -211,16 +231,17 @@ fun photoWithButtons(uriHandler: UriHandler) {
     )
 
     Column(
-        modifier = Modifier
-            .padding(16.dp),
+        modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Circular photo
+        // Responsive circular photo
         Image(
-            painter = painterResource(Res.drawable.foto), // Replace with your drawable resource
+            painter = painterResource(Res.drawable.foto),
             contentDescription = "Profile Photo",
-            modifier = Modifier.size(200.dp).clip(CircleShape).border(2.dp, MaterialTheme.colors.primary, CircleShape),
-
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape)
+                .border(2.dp, MaterialTheme.colors.primary, CircleShape),
             contentScale = ContentScale.Crop
         )
 
@@ -228,15 +249,19 @@ fun photoWithButtons(uriHandler: UriHandler) {
 
         // Row of rectangle buttons
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             socials.forEach {
                 Button(
                     onClick = { uriHandler.openUri(it.link) },
-                    modifier = Modifier
-                        .padding(6.dp)
+                    modifier = Modifier.padding(4.dp)
                 ) {
-                    Icon(painter = painterResource(it.icon), null, modifier = Modifier.size(36.dp), tint = Color.White)
+                    Icon(
+                        painter = painterResource(it.icon),
+                        null,
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.White
+                    )
                 }
             }
         }
@@ -255,18 +280,18 @@ fun projectCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp
     ) {
         Column {
-            // Project Image
+            // Responsive Project Image
             Image(
-                painter = painterResource(imageVector), // Replace with actual image
+                painter = painterResource(imageVector),
                 contentDescription = "Project Image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(400.dp),
+                    .height(200.dp),
                 contentScale = ContentScale.Crop
             )
 
@@ -275,15 +300,18 @@ fun projectCard(
             // Project Name
             Text(
                 text = projectName,
-                fontSize = 34.sp,
+                fontSize = 24.sp,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontFamily = rubikMono()
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Tech Stack Icons
-            LazyRow(modifier = Modifier.padding(horizontal = 16.dp)) {
+            // Tech Stack Icons - Responsive
+            LazyRow(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 items(techStack) { label ->
                     techBadge(label)
                 }
@@ -294,8 +322,9 @@ fun projectCard(
             // Project Description
             Text(
                 text = projectDescription,
-                fontSize = 28.sp,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                lineHeight = 24.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -309,7 +338,12 @@ fun projectCard(
                         .align(Alignment.Start)
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    Text(text = "Learn more", fontFamily = rubikFamily(), fontSize = 28.sp, color = Color.White)
+                    Text(
+                        text = "Learn more",
+                        fontFamily = rubikFamily(),
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -322,26 +356,28 @@ fun techBadge(label: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(8.dp)
+            .padding(2.dp)
             .background(MaterialTheme.colors.primary, CircleShape)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(12.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(8.dp)
+        ) {
             Icon(
                 imageVector = Icons.Filled.Done,
                 contentDescription = label,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(16.dp),
                 tint = Color.White
             )
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = label, fontSize = 18.sp, color = Color.White)
+            Text(text = label, fontSize = 14.sp, color = Color.White)
         }
-
     }
 }
 
 @Composable
 fun experienceTimeline() {
-    Column {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         // First Experience Item
         experienceItem(
             companyName = "Sociedad Latinoamericana de Nutrición (SLAN)",
@@ -395,10 +431,9 @@ fun experienceItem(
             Box(
                 modifier = Modifier
                     .width(2.dp)
-                    .height(100.dp)
+                    .height(80.dp)
                     .background(accentColor)
             )
-
         }
 
         // Right side - Content
@@ -411,7 +446,7 @@ fun experienceItem(
             Text(
                 text = companyName,
                 color = accentColor,
-                fontSize = 28.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Medium
             )
 
@@ -419,7 +454,7 @@ fun experienceItem(
             if (position.isNotEmpty()) {
                 Text(
                     text = position,
-                    fontSize = 26.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(top = 4.dp)
                 )
@@ -429,14 +464,14 @@ fun experienceItem(
             Text(
                 text = period,
                 color = Color.Gray,
-                fontSize = 24.sp,
+                fontSize = 16.sp,
                 modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
             )
 
             // Description
             Text(
                 text = description,
-                fontSize = 24.sp,
+                fontSize = 16.sp,
                 lineHeight = 20.sp
             )
         }
@@ -449,189 +484,147 @@ fun contactCard(uriHandler: UriHandler) {
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 200.dp),
+            .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = 8.dp
     ) {
         Column(
-            modifier = Modifier
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.Start
         ) {
-            // Contact options
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            // Contact options - Responsive layout
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.Start
             ) {
                 // Linkedin
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .clickable { uriHandler.openUri("https://www.linkedin.com/in/fabianverdesoto/") }
-                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
-                            .size(130.dp)
-                            .padding(10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.linkedin),
-                            contentDescription = "Linkedin",
-                            tint = Color.White,
-                            modifier = Modifier.size(100.dp)
-                        )
-                    }
-                    Text(
-                        text = "LinkeDin",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(top = 10.dp),
-                        fontFamily = rubikMono()
-                    )
-                    Text(
-                        text = "Fabian Verdesoto",
-                        color = secondaryTextColor,
-                        fontSize = 25.sp,
-                        modifier = Modifier.padding(top = 4.dp),
-                        fontFamily = rubikFamily()
-                    )
-                }
+                contactItem(
+                    iconRes = Res.drawable.linkedin,
+                    title = "LinkedIn",
+                    subtitle = "Fabian Verdesoto",
+                    onClick = { uriHandler.openUri("https://www.linkedin.com/in/fabianverdesoto/") },
+                    secondaryTextColor = secondaryTextColor
+                )
 
                 // Email
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .clickable { uriHandler.openUri("https://mail.google.com/mail/?view=cm&fs=1&to=fevr.developer@gmail.com") }
-                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
-                            .size(130.dp)
-                            .padding(10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Email,
-                            contentDescription = "Email",
-                            modifier = Modifier.size(100.dp),
-                            tint = Color.White,
-                        )
-                    }
-                    Text(
-                        text = "Email",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(top = 10.dp),
-                        fontFamily = rubikMono()
-                    )
-                    Text(
-                        text = "fevr.developer@gmail.com",
-                        color = secondaryTextColor,
-                        fontSize = 25.sp,
-                        modifier = Modifier.padding(top = 4.dp),
-                        fontFamily = rubikFamily()
-                    )
-                }
+                contactItem(
+                    iconVector = Icons.Rounded.Email,
+                    title = "Email",
+                    subtitle = "fevr.developer@gmail.com",
+                    onClick = { uriHandler.openUri("https://mail.google.com/mail/?view=cm&fs=1&to=fevr.developer@gmail.com") },
+                    secondaryTextColor = secondaryTextColor
+                )
 
                 // Github
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .clickable { uriHandler.openUri("https://github.com/FabianeloV") }
-                            .size(130.dp)
-                            .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
-                            .padding(10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.github),
-                            contentDescription = "Github",
-                            modifier = Modifier.size(100.dp),
-                            tint = Color.White
-                        )
-                    }
-                    Text(
-                        text = "Github",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(top = 10.dp),
-                        fontFamily = rubikMono()
-                    )
-                    Text(
-                        text = "FabianeloV",
-                        color = secondaryTextColor,
-                        fontSize = 25.sp,
-                        modifier = Modifier.padding(top = 4.dp),
-                        fontFamily = rubikFamily()
-                    )
-                }
+                contactItem(
+                    iconRes = Res.drawable.github,
+                    title = "Github",
+                    subtitle = "FabianeloV",
+                    onClick = { uriHandler.openUri("https://github.com/FabianeloV") },
+                    secondaryTextColor = secondaryTextColor
+                )
             }
         }
     }
 }
 
 @Composable
-fun techGrid() {
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 220.dp)
+fun contactItem(
+    iconRes: DrawableResource? = null,
+    iconVector: androidx.compose.ui.graphics.vector.ImageVector? = null,
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit,
+    secondaryTextColor: Color
+) {
+    Row(
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(18.dp),
-            modifier = Modifier.fillMaxWidth()
+        // Icon
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colors.secondary, RoundedCornerShape(12.dp))
+                .size(60.dp)
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
         ) {
-            techCard(
-                iconRes = Res.drawable.Kotlin,
-                name = "Kotlin",
-                modifier = Modifier.weight(1f)
-            )
-            techCard(
-                iconRes = Res.drawable.java,
-                name = "Java",
-                modifier = Modifier.weight(1f)
-            )
-            techCard(
-                iconRes = Res.drawable.python,
-                name = "Python",
-                modifier = Modifier.weight(1f)
-            )
-            techCard(
-                iconRes = Res.drawable.compose,
-                name = "j. Compose",
-                modifier = Modifier.weight(1f)
-            )
+            if (iconRes != null) {
+                Icon(
+                    painter = painterResource(iconRes),
+                    contentDescription = title,
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp)
+                )
+            } else if (iconVector != null) {
+                Icon(
+                    imageVector = iconVector,
+                    contentDescription = title,
+                    modifier = Modifier.size(40.dp),
+                    tint = Color.White,
+                )
+            }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(18.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            techCard(
-                iconRes = Res.drawable.data,
-                name = "PostgreSQL",
-                modifier = Modifier.weight(1f)
+        Spacer(modifier = Modifier.width(16.dp))
+
+        // Text content
+        Column {
+            Text(
+                text = title,
+                fontWeight = FontWeight.Medium,
+                fontSize = 18.sp,
+                fontFamily = rubikMono()
             )
-            techCard(
-                iconRes = Res.drawable.firebase,
-                name = "Firebase",
-                modifier = Modifier.weight(1f)
-            )
-            techCard(
-                iconRes = Res.drawable.ktor,
-                name = "ktor",
-                modifier = Modifier.weight(1f)
-            )
-            techCard(
-                iconRes = Res.drawable.spring,
-                name = "Spring",
-                modifier = Modifier.weight(1f)
+            Text(
+                text = subtitle,
+                color = secondaryTextColor,
+                fontSize = 14.sp,
+                fontFamily = rubikFamily()
             )
         }
+    }
+}
 
+@Composable
+fun techGrid() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // First row
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(listOf(
+                Pair(Res.drawable.Kotlin, "Kotlin"),
+                Pair(Res.drawable.java, "Java"),
+                Pair(Res.drawable.python, "Python"),
+                Pair(Res.drawable.compose, "jetpack Compose")
+            )) { (iconRes, name) ->
+                techCard(iconRes = iconRes, name = name)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Second row
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            items(listOf(
+                Pair(Res.drawable.data, "PostgreSQL"),
+                Pair(Res.drawable.firebase, "Firebase"),
+                Pair(Res.drawable.ktor, "ktor"),
+                Pair(Res.drawable.spring, "Spring")
+            )) { (iconRes, name) ->
+                techCard(iconRes = iconRes, name = name)
+            }
+        }
     }
 }
 
@@ -643,7 +636,8 @@ fun techCard(
 ) {
     Card(
         modifier = modifier
-            .padding(5.dp),
+            .width(120.dp)
+            .padding(4.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = 6.dp
     ) {
@@ -655,7 +649,7 @@ fun techCard(
             Image(
                 painter = painterResource(iconRes),
                 contentDescription = name,
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -663,7 +657,9 @@ fun techCard(
                 fontFamily = rubikMono(),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.primary,
-                fontSize = 24.sp
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

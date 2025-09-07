@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.fevr.portfolio.screens.mainScreen
@@ -50,6 +51,8 @@ fun topWebAppBar(state: MutableState<Boolean>, scrollState: LazyListState) {
             Text(
                 "Fabian Verdesoto",
                 fontFamily = rubikMono(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
                 )
         },
         actions = {
@@ -74,7 +77,8 @@ fun topActions(state: MutableState<Boolean>, scrollState: LazyListState) {
             it.first,
             modifier = Modifier.padding(10.dp).clickable(onClick = { scope.launch { scrollState.animateScrollToItem(it.second) } }),
             fontFamily = rubikFamily(),
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            overflow = TextOverflow.Ellipsis
         )
     }
 
